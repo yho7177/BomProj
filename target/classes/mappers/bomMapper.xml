@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.bom.bomprocess">
+  	<select id="getFinished" resultType="com.bom.domain.Finished">
+  		select * from finished
+  	</select>
+  	<select id="bomProcess" resultType="com.bom.domain.BomProcess">
+  		select p.*, count(r.productno) * #{qty}  as qty, r.parent from recipe r, product p where r.productno = p.productno and recipeno = #{recipeno} group by r.productno 
+  	</select>
+  	<select id="getFinishedOne" resultType="com.bom.domain.Finished">
+  		select * from finished where recipeno = #{recipeno}
+  	</select>
+  	<select id="orderProcess" resultType="com.bom.domain.BomProcess">
+  		select p.*, p.stock - (count(r.productno) * #{qty}) as outofstock, p.price * #{qty} as totalCost from product p, recipe r where p.productno = r.productno and recipeno=#{rno} group by r.productno;
+  	</select>
+  	<insert id="outOfStockInsert">
+  		insert into stockorder(productno, howmany) values(#{productno}, #{howmany})
+  	</insert>
+  	<insert id="outOfStockDuration">
+  		insert into billing(duration, totcost) values(date_add(now() , interval (10 * #{outofstock}) minute), #{totcost})
+  	</insert>
+  </mapper>

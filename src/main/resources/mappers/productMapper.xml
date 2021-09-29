@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.bom.product">
+  	<select id="getAllProduct" resultType="com.bom.domain.Product">
+  		select * from product where (name like concat('%',#{searchText},'%') or productno like concat('%',#{searchText},'%'))
+  		<if test="searchType != ''">
+  			and category = #{searchType}
+  		</if>
+  		limit #{startNum}, #{postPerPage}
+  	</select>
+  	<select id="proInfo" resultType="com.bom.domain.Product">
+  		select * from product where productno = #{no}
+  	</select>
+  	<select id="getTotalProduct" resultType="int">
+  		select count(*) from product
+  	</select>
+  	<delete id="delPro">
+  		delete from product where productno = #{no}
+  	</delete>
+  	<select id="getTotalProduct2" resultType="Integer">
+  		select count(*) from product where (name like concat('%',#{searchText},'%') or productno like concat('%',#{searchText},'%'))  
+  		<if test="searchType != ''">
+  			and category = #{searchType} 
+  		</if>
+  	</select>
+  	<insert id="addProduct">
+  		insert into product(productno, category, name, img, stock) values(#{productno}, #{category}, #{name}, #{img}, #{stock})
+  	</insert>
+  	<update id="upadateProduct">
+  		update product set category = #{category}, name = #{name}, img = #{img}, stock = #{stock}, registerdate = CURRENT_TIMESTAMP where productno = #{productno}
+  	</update>
+  	<select id="getBomProduct" resultType="com.bom.domain.BomProcess">
+  		select p.*, count(p.productno) * #{qty}  as qty, r.parent from recipe r, product p where r.productno = p.productno and recipeno = #{recipeno} group by r.productno limit #{startNum}, #{postPerPage}
+  	</select>
+  	<select id="getBomTotal" resultType="int">
+		select count(distinct(productno)) from recipe where recipeno = #{recipeno}	
+  	</select>
+  </mapper>

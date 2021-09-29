@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bom.order">
+	<select id="selectBilling" resultType="com.bom.domain.Billing">
+		select * from billing order by orderdate
+	</select>
+	<update id="statusUpdate">
+		update billing set status = '완료' where no = #{no}
+	</update>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.bom.mainmap">
+  	<select id="selectFinished" resultType="com.bom.domain.Finished">
+  		select * from finished where productno = #{no}
+  	</select>
+  	<select id ="noCheck" resultType="int">
+  		select count(*) from finished where productno = #{no}
+  	</select>
+  	<select id="recipeCheck" resultType="int">
+  		select count(*) from recipe where recipeno = #{recipe}
+  	</select>
+  	<insert id="addProduct">
+  		insert into finished values(#{productno}, #{title}, #{brick}, #{release}, #{series}, #{img})
+  	</insert>
+  	<insert id="addProduct2">
+  		insert into recipe(recipeno, productno) values(#{recipeno}, #{productno})
+  	</insert>
+  	
+  	<select id="productAll" resultType="com.bom.domain.Finished">
+  		select * from finished
+  	</select>
+  	
+  	<insert id="forrecipe">
+  		insert into recipe(recipeno, productno, parent) values(#{recipeno}, #{productno}, #{parent})
+  	</insert>
+  	<select id="getTree" resultType="com.bom.domain.Recipe">
+  		select p.name, p.img, r.* from recipe r left outer join product p on p.productno = r.productno where recipeno = #{rno} group by productno
+  	</select>
+  	<select id="selectedTree" resultType="com.bom.domain.Product">
+  		select * from product where productno = #{productno}
+  	</select>
+  </mapper>
