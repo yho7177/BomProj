@@ -37,8 +37,4 @@ public class BomService {
 	public int outOfStockOrder(List<BomProcess> bom) throws Exception {
 		return dao.outOfStockOrder(bom);
 	}
-
-	
-	
-
 }

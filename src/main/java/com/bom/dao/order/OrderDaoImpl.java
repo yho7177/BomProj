@@ -1,5 +1,6 @@
 package com.bom.dao.order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,6 +25,11 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public int statusUpdate(int no) throws Exception {
 		return ses.update(NS + ".statusUpdate", no);
+	}
+
+	@Override
+	public List<Billing> getBillOfType(Object serchType) throws Exception {
+		return ses.selectList(NS + ".getBillOfType", serchType);
 	}
 
 }

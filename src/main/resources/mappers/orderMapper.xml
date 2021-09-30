@@ -5,9 +5,12 @@
 
 <mapper namespace="com.bom.order">
 	<select id="selectBilling" resultType="com.bom.domain.Billing">
-		select * from billing order by orderdate
+		select * from billing order by orderdate desc
 	</select>
 	<update id="statusUpdate">
 		update billing set status = '완료' where no = #{no}
 	</update>
+	<select id="getBillOfType" resultType="com.bom.domain.Billing">
+		select * from billing where status = #{searchType} order by orderdate desc
+	</select>
 </mapper>

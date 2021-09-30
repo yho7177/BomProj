@@ -22,4 +22,8 @@ public class OrderService {
 		return dao.statusUpdate(no);
 	}
 
+	public List<Billing> getBillOfType(String searchType) throws Exception {
+		return dao.getBillOfType(searchType);
+	}
+
 }

@@ -22,7 +22,7 @@ import com.bom.service.bom.BomService;
 import com.bom.service.product.ProductService;
 
 @Controller
-public class Page2Controller {
+public class BomController {
 	@Inject
 	private BomService service;
 	
@@ -69,6 +69,7 @@ public class Page2Controller {
 	public String orderProcess(@RequestParam("recipeno")String rno, @RequestParam("qty")String qty) {
 		try {
 			List<BomProcess> tmp = service.orderProcess(rno, qty);
+			
 			System.out.println(tmp.toString());
 			List<BomProcess> bom = new ArrayList<BomProcess>();
 			for(BomProcess b : tmp) {
@@ -84,6 +85,6 @@ public class Page2Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "page2";
+		return "/order";
 	}
 }

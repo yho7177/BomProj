@@ -17,9 +17,12 @@
   		select p.*, p.stock - (count(r.productno) * #{qty}) as outofstock, p.price * #{qty} as totalCost from product p, recipe r where p.productno = r.productno and recipeno=#{rno} group by r.productno;
   	</select>
   	<insert id="outOfStockInsert">
-  		insert into stockorder(productno, howmany) values(#{productno}, #{howmany})
+  		insert into stockorder(productno, howmany, billingno) values(#{productno}, #{howmany}, #{bno})
   	</insert>
   	<insert id="outOfStockDuration">
   		insert into billing(duration, totcost) values(date_add(now() , interval (10 * #{outofstock}) minute), #{totcost})
   	</insert>
+  	<select id="getNextBillingNo" resultType="int">
+  		select max(no) from billing
+  	</select>
   </mapper>

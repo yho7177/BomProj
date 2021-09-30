@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -300,7 +301,7 @@
 													</c:otherwise>
 													</c:choose>
 												</p></td>
-											<td><p class="text-xs font-weight-bold mb-0">${product.registerdate }</p></td>
+											<td><p class="text-xs font-weight-bold mb-0"><fmt:formatDate value="${product.registerdate }" pattern="yyyy년 MM월 dd일 HH시 mm분"/></p></td>
 											<td><p class="text-xs font-weight-bold mb-0">${product.stock }</p></td>
 											<td class="align-middle"><a
 												class="text-secondary font-weight-bold text-xs"

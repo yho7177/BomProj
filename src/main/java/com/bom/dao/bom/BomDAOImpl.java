@@ -48,24 +48,36 @@ public class BomDAOImpl implements BomDAO {
 
 	@Override
 	public int outOfStockOrder(List<BomProcess> bom) throws Exception {
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		int tmp = 0;
 		int totcost = 0;
 		for(BomProcess b : bom) {
-			map.put("productno", b.getProductno());
-			map.put("howmany", b.getOutofstock());
+			
 			tmp += b.getOutofstock();
 			totcost += b.getTotalCost();
-			ses.insert(NS + ".outOfStockInsert", map);
-			map.remove("productno");
-			map.remove("howmany");
+			
 		}
 		
 		tmp = tmp * -1;
 		Map<String, Integer> map2 = new HashMap<String, Integer>();
 		map2.put("outofstock", tmp);
 		map2.put("totcost", totcost);
-		return ses.insert(NS + ".outOfStockDuration", map2);
+		ses.insert(NS + ".outOfStockDuration", map2);
+		int billingno = getNextBillingNo();
+		for(BomProcess b : bom) {
+			map.put("productno", b.getProductno());
+			map.put("howmany", b.getOutofstock());
+			map.put("bno", billingno);
+			ses.insert(NS + ".outOfStockInsert", map);
+			map.remove("productno");
+			map.remove("howmany");
+		}
+		return 1;
+	}
+
+	private int getNextBillingNo() {
+		return ses.selectOne(NS + ".getNextBillingNo");
 	}
 
 }

@@ -10,4 +10,6 @@ public interface OrderDao {
 
 	int statusUpdate(int no) throws Exception;
 
+	List<Billing> getBillOfType(Object serchType) throws Exception;
+
 }
