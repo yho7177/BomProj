@@ -1,24 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="utf-8" />
-<title>Soft UI Dashboard by Creative Tim</title>
+<title>LEGO</title>
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 	$(function() {
-
+		// 트리추가 모달 keyup으로 하위 제품들 가져오기
+		$("#addProductNo").keyup(function(evt) {
+			let key = $(this).val();
+			let url = "/keyupProduct";
+			console.log(key.length);
+			if(key.length > 1) {
+				$.ajax({
+					url : url, // ajax와 통신 할 곳
+					data : {key : key}, // 서블릿에 보낼 데이터
+					dataType : "json", // 수신될 데이터의 타입
+					type : "post", // 통신 방식
+					headers : {
+						"content-type" : "application/json",
+						"X-HTTP-Method-Override" : "POST"
+					},
+					success : function(data) { // 통신 성공시 수행될 콜백 함수
+						console.log(data);
+					},
+					error : function(data) { 
+						console.log(data);
+					}
+				});
+			} 				
+ 		});
+		
 		$('#treeset')
 				.bind(
 						'select_node.jstree',
 						function(event, data) {
 							// 노드를 선택했을 때 적용할 코드 작성
 							let no = data.instance.get_node(data.selected).id;
+							$("#parentno").val(no);
 							let url = "/selectedTree"
 							$
 									.ajax({
@@ -114,7 +138,7 @@
 			});
 		});
 
-		$("#imgs").change(function(evt) {
+		/* $("#imgs").change(function(evt) {
 			let url = "/upload";
 			let file = $(this)[0].files[0];
 			let formData = new FormData();
@@ -137,7 +161,7 @@
 
 			});
 
-		});
+		}); */
 
 	});
 
@@ -317,8 +341,7 @@
 	}
 
 	function createJSTree(json) {
-		
-		
+
 		$('#treeset').jstree({
 			"conditionalselect" : function(node, event) {
 				return true;
@@ -375,7 +398,7 @@
 					</c:forEach>
 				</ul>
 				<button type="button" class="btn bg-gradient-primary"
-					data-bs-toggle="modal" data-bs-target="#exampleModal2">부품
+					data-bs-toggle="modal" data-bs-target="#exampleModal2">트리
 					추가</button>
 				<button type="button" class="btn btn-outline-dark btn-sm">수정</button>
 				<button type="button" class="btn btn-outline-dark btn-sm">삭제</button>
@@ -418,7 +441,7 @@
 							<div class="col-6 text-end"></div>
 						</div>
 					</div>
-					<div class="card-body p-3 pb-0 treediv" >
+					<div class="card-body p-3 pb-0 treediv">
 						<div id="treeset"></div>
 					</div>
 				</div>
@@ -508,7 +531,8 @@
 			</div>
 			<div class="col-lg-8 lov">
 				<div class="row">
-					<div class="col-md-6"><br /><br /><br /><br />
+					<div class="col-md-6">
+						<br /> <br /> <br /> <br />
 						<div class="card">
 							<div class="card-header pb-0 px-3">
 								<h6 class="mb-0">Product Information</h6>
@@ -639,71 +663,35 @@
 			</div>
 		</div>
 	</form>
-
-	<form action="/forrecipe" method="post">
+	<!--  트리 추가 모달 -->
+	<form action="/addChildren" method="post">
 		<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel2">부품 추가</h5>
+						<h5 class="modal-title" id="exampleModalLabel">트리의 자식 추가</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-
 					<div class="modal-body">
-						<label class="form-control-label" for="productno2">제품번호</label>
-						<div class="input-group mb-3">
-							<input type="text" id="productno2" name="productno"
-								class="form-control " placeholder="Recipient's username"
-								aria-label="Recipient's username"
-								aria-describedby="button-addon2">
-							<button class="btn btn-outline-primary mb-0" type="button">중복확인</button>
+						<div class="form-group">
+							<label for="parentno">선택한 제품(상위 제품)</label> <input type="text"
+								class="form-control form-control-alternative" id="parentno">
 						</div>
-
-						<label class="form-control-label" for="title2">제품 이름</label>
-						<div class="input-group">
-							<input type="text" id="title2" name="name" class="form-control"
-								aria-label="Sizing example input"
-								aria-describedby="inputGroup-sizing-default">
-						</div>
-
-						<label class="form-control-label" for="parent">상위 항목</label>
-						<div class="input-group mb-3">
-							<input type="text" id="parent" name="parent"
-								class="form-control " placeholder="Recipient's username"
-								aria-label="Recipient's username"
-								aria-describedby="button-addon2">
-							<button class="btn btn-outline-primary mb-0" type="button">중복확인</button>
-						</div>
-
-						<label class="form-control-label" for="img2">이미지</label>
-						<div class="input-group">
-							<input type="file" id="imgs" class="form-control"
-								aria-label="Sizing example input"
-								aria-describedby="inputGroup-sizing-default"> <input
-								type="hidden" id="upFileName2" name="img" />
-						</div>
-						<label class="form-control-label" for="recipe2">레시피 번호</label>
-						<div class="input-group mb-3">
-							<input type="text" id="recipe2" name="recipeno"
-								class="form-control " placeholder="Recipient's username"
-								aria-label="Recipient's username"
-								aria-describedby="button-addon2">
-							<button class="btn btn-outline-primary mb-0" type="button"
-								id="button-addon2">중복확인</button>
+						
+						<div class="form-group">
+							<label for="parentno">추가할 제품(하위 제품)</label> <input type="text"
+								class="form-control form-control-alternative" id="addProductNo">
 						</div>
 					</div>
-
-
 					<div class="modal-footer">
 						<button type="button" class="btn bg-gradient-secondary"
 							data-bs-dismiss="modal">취소</button>
 						<button type="submit" class="btn bg-gradient-primary">저장</button>
 					</div>
-
 				</div>
 			</div>
 		</div>

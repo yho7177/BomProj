@@ -57,5 +57,9 @@ public class MainDAOImpl implements MainDAO {
 	public Product selectedTree(String no) throws Exception {
 		return ses.selectOne(NS + ".selectedTree", no);
 	}
+	@Override
+	public List<Product> keyupProduct(String key) throws Exception {
+		return ses.selectList(NS + ".keyupProduct", key);
+	}
 
 }

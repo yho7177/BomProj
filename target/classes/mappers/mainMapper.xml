@@ -33,4 +33,7 @@
   	<select id="selectedTree" resultType="com.bom.domain.Product">
   		select * from product where productno = #{productno}
   	</select>
+  	<select id="keyupProduct" resultType="com.bom.domain.Product">
+  		select * from product where name like concat('%',#{key},'%') or productno like concat('%',#{key},'%')
+  	</select>
   </mapper>

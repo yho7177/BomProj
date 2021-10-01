@@ -1,11 +1,11 @@
 package com.bom.controller;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.Map;
+
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -17,14 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
+
 
 import com.bom.domain.Finished;
 import com.bom.domain.Product;
@@ -175,6 +174,30 @@ public class MainController {
 			json.put("category", pr.getCategory());
 		} catch (Exception e) {
 			json.put("result", "fail");
+			e.printStackTrace();
+		}
+		resp.getWriter().print(json);
+	}
+	
+	@RequestMapping(value="/keyupProduct", method = RequestMethod.POST)
+	@ResponseBody
+	public void keyupProduct(@RequestBody String key, HttpServletResponse resp) throws IOException {
+		JSONObject json = new JSONObject();
+		System.out.println(key);
+		try {
+			List<Product> lst = service.keyupProduct(key);
+			System.out.println(lst.get(0).toString());
+			JSONArray arr = new JSONArray();
+			for(Product p : lst) {
+				JSONObject obj = new JSONObject();
+				obj.put("productno", p.getProductno());
+				obj.put("name", p.getName());
+				obj.put("img", p.getImg());
+				arr.add(obj);
+				obj = null;
+			}
+			json.put("items", arr);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		resp.getWriter().print(json);

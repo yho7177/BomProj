@@ -24,4 +24,6 @@ public interface MainService {
 
 	Product selectedTree(String no) throws Exception;
 
+	List<Product> keyupProduct(String key) throws Exception;
+
 }

@@ -56,6 +56,9 @@ public class MainServiceImpl implements MainService {
 		return dao.selectedTree(no);
 	}
 
-	
-	
+	@Override
+	public List<Product> keyupProduct(String key) throws Exception {
+		return dao.keyupProduct(key);
+	}
+
 }
