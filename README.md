@@ -1,1 +1,5 @@
-BOM(Bom Of Materials)
+**BOM(Bom Of Materials)**
+
+**개요**
+레고를 이용한 한 완성품의 레고에 들어가는 각각의 레고부속물에 대한 상위와 하위관계를
+구성
